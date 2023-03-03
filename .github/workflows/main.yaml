@@ -1,0 +1,15 @@
+name: Deploy to Netlify
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build -t salary .
+      - name: Authenticate with the Netlify CLI
+        run: npx netlify-cli deploy --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
